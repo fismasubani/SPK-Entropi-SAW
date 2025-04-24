@@ -17,7 +17,7 @@ class CreateKriteriasTable extends Migration
             $table->id();
             $table->string('nama_kriteria',191);
             $table->string('attribut',191);
-            $table->integer('bobot');
+            $table->decimal('bobot', 8, 4);
             $table->timestamps();
         });
     }

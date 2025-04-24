@@ -13,4 +13,10 @@ class Kriteria extends Model
     {
         return $this->hasMany(Crips::class, 'kriteria_id');
     }
+
+    public function penilaian()
+    {
+        return $this->hasManyThrough(Penilaian::class, Crips::class, 'kriteria_id', 'crips_id');
+    }
+
 }

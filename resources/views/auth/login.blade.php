@@ -21,20 +21,64 @@
     <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
 
     <style>
-        #title{
-            padding:70px 30px 70px 30px;
+        body {
+            font-family: 'Nunito', sans-serif;
+        }
+
+        #title {
+            padding: 50px 30px;
+            text-align: center;
+            color: #000000;
+        }
+
+        .login-container {
+            margin-top: 100px;
+        }
+
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-control-user {
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .btn-user {
+            border-radius: 10px;
+            padding: 12px;
+        }
+
+        .btn-primary {
+            background-color: #4e73df;
+            border-color: #4e73df;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #2e59d9;
+            border-color: #2e59d9;
+        }
+
+        .card-body {
+            background: #f8f9fc;
+        }
+
+        .logo {
+            max-width: 200px;
+            margin-bottom: 20px;
         }
     </style>
-
 
 </head>
 
 <body class="bg-gradient-primary">
 
-    <div class="container">
+    <div class="container login-container">
 
         <!-- Outer Row -->
-        <div class="row justify-content-center mt-5">
+        <div class="row justify-content-center">
 
             <div class="col-xl-10 col-lg-12 col-md-9">
 
@@ -43,17 +87,18 @@
                         <!-- Nested Row within Card Body -->
                         <div class="row">
                             <div class="col-lg-6 d-none d-lg-block text-center" id="title">
-                                <h3>Sistem Pendukung Keputusan Metode Entropi-SAW (Simple Additive Weighting)</h3>
+                                <img src="{{ asset('img/logo smp 8.png') }}" class="logo" alt="Logo SMPN 8 Pasuruan">
+                                <h4>Sistem Pendukung Keputusan Metode Entropi-SAW <br> (Simple Additive Weighting)</h4>
                             </div>
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
+                                        <h1 class="h4 text-gray-900 mb-4">Selamat Datang</h1>
                                     </div>
                                     <form class="user" method="post" action="{{ route('login') }}">
                                         @csrf
                                         <div class="form-group">
-                                            <input id="email" type="email" class="form-control form-control-user @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="Masukan Email">
+                                            <input id="email" type="email" class="form-control form-control-user @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="Masukkan Email">
 
                                             @error('email')
                                                 <span class="invalid-feedback" role="alert">
@@ -62,7 +107,7 @@
                                             @enderror
                                         </div>
                                         <div class="form-group">
-                                            <input id="password" type="password" class="form-control form-control-user @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="Masukan Password">
+                                            <input id="password" type="password" class="form-control form-control-user @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="Masukkan Password">
 
                                             @error('password')
                                                 <span class="invalid-feedback" role="alert">
@@ -70,23 +115,8 @@
                                                 </span>
                                             @enderror
                                         </div>
-                                        <button 
-                                            class="btn btn-primary btn-user btn-block"> Login
-                                        </button>
-                                        <!-- <div class="form-group">
-                                            <div class="custom-control custom-checkbox small">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck">
-                                                <label class="custom-control-label" for="customCheck">Remember
-                                                    Me</label>
-                                            </div>
-                                        </div> -->
+                                        <button class="btn btn-primary btn-user btn-block"> Login </button>
                                     </form>
-                                    <!-- <div class="text-center">
-                                        <a class="small" href="forgot-password.html">Forgot Password?</a>
-                                    </div>
-                                    <div class="text-center">
-                                        <a class="small" href="register.html">Create an Account!</a>
-                                    </div> -->
                                 </div>
                             </div>
                         </div>

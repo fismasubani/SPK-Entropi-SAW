@@ -18,6 +18,14 @@ class CreatePenilaiansTable extends Migration
             $table->unsignedBigInteger('alternatif_id');
             $table->unsignedBigInteger('crips_id');
             $table->timestamps();
+
+            // Tambahkan foreign key dengan cascade delete
+            $table  ->foreign('alternatif_id')
+                    ->references('id')->on('alternatifs')
+                    ->onDelete('cascade');
+            $table  ->foreign('crips_id')
+                    ->references('id')->on('crips')
+                    ->onDelete('cascade');
         });
     }
 
