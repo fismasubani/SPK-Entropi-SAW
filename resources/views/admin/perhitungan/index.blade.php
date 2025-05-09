@@ -18,13 +18,13 @@
 </div>
 @endif
 
-<!-- ANALISA -->
+<!-- PENILAIAN ALTERNATIF -->
 
 <div class="card shadow mb-4">
     <!-- Card Header - Accordion -->
     <a href="#tambahkriteria" class="d-block card-header py-3" data-toggle="collapse"
         role="button" aria-expanded="true" aria-controls="collapseCardExample">
-        <h6 class="m-0 font-weight-bold text-primary">Tahap Analisa</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Tahap Penilaian Alternatif</h6>
     </a>
     <!-- Card Content - Collapse -->
     <div class="collapse show" id="tambahkriteria">
@@ -65,7 +65,7 @@
 <div class="card shadow mb-4">
     <a href="#normalisasi" class="d-block card-header py-3" data-toggle="collapse"
         role="button" aria-expanded="true" aria-controls="collapseCardExample">
-        <h6 class="m-0 font-weight-bold text-primary">Tahap Normalisasi</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Tahap Normalisasi (SAW)</h6>
     </a>
     <div class="collapse show" id="normalisasi">
         <div class="card-body">
@@ -105,7 +105,7 @@
 <div class="card shadow mb-4">
     <a href="#ranking" class="d-block card-header py-3" data-toggle="collapse"
         role="button" aria-expanded="true" aria-controls="collapseCardExample">
-        <h6 class="m-0 font-weight-bold text-primary">Tahap Perangkingan</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Tahap Perhitungan Preferensi (V)</h6>
     </a>
     <div class="collapse show" id="ranking">
         <div class="card-body">

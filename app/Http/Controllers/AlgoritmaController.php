@@ -18,7 +18,7 @@ class AlgoritmaController extends Controller
     public function index()
     {
         $alternatif = Alternatif::with('penilaian.crips')->get();
-        $kriteria = Kriteria::with('crips')->orderBy('nama_kriteria', 'ASC')->get();
+        $kriteria = Kriteria::with('crips')->orderBy('id', 'ASC')->get();
         $penilaian = Penilaian::with('crips', 'alternatif')->get();
 
         // Jika tidak ada data penilaian, langsung tampilkan view dengan pesan
@@ -109,7 +109,7 @@ class AlgoritmaController extends Controller
     public function cetak()
     {
         $alternatif = Alternatif::with('penilaian.crips')->get();
-        $kriteria = Kriteria::with('crips')->orderBy('nama_kriteria', 'ASC')->get();
+        $kriteria = Kriteria::with('crips')->orderBy('id', 'ASC')->get();
         $penilaian = Penilaian::with('crips', 'alternatif')->get();
 
         // Jika tidak ada data penilaian, buat PDF kosong dengan pesan

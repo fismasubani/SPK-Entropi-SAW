@@ -13,8 +13,7 @@ class PenilaianController extends Controller
     public function index()
     {
         $alternatif = Alternatif::with('penilaian.crips')->get();
-        $kriteria = Kriteria::with('crips')->orderBy('nama_kriteria', 'ASC')->get();
-        // return response()->json($alternatif);
+        $kriteria = Kriteria::with('crips')->orderBy('id', 'ASC')->get();
         return view('admin.penilaian.index', compact('alternatif', 'kriteria'));
     }
 
@@ -22,7 +21,7 @@ class PenilaianController extends Controller
     {
         // return response()->json($request);
         try {
-            DB::select("TRUNCATE penilaian");
+            DB::select("TRUNCATE penilaians");
             foreach ($request->crips_id as $key => $value) {
                 foreach($value as $key_1 => $value_1)
                 {

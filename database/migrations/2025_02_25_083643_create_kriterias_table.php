@@ -13,7 +13,7 @@ class CreateKriteriasTable extends Migration
      */
     public function up()
     {
-        Schema::create('kriteria', function (Blueprint $table) {
+        Schema::create('kriterias', function (Blueprint $table) {
             $table->id();
             $table->string('nama_kriteria',191);
             $table->string('attribut',191);
@@ -29,6 +29,6 @@ class CreateKriteriasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('kriteria');
+        Schema::dropIfExists('kriterias');
     }
 }

@@ -41,7 +41,7 @@
     <li class="nav-item {{ request()->routeIs('kriteria.*') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('kriteria.index') }}">
             <i class="fas fa-fw fa-balance-scale"></i>
-            <span>Kriteria</span>
+            <span>Data Kriteria</span>
         </a>
     </li>
 
@@ -49,7 +49,7 @@
     <li class="nav-item {{ request()->routeIs('alternatif.*') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('alternatif.index') }}">
             <i class="fas fa-fw fa-users"></i>
-            <span>Alternatif</span>
+            <span>Data Alternatif</span>
         </a>
     </li>
 
@@ -57,7 +57,7 @@
     <li class="nav-item {{ request()->routeIs('penilaian.*') ? 'active' : '' }}">
         <a class="nav-link" href="{{ route('penilaian.index') }}">
             <i class="fas fa-fw fa-star"></i>
-            <span>Penilaian</span>
+            <span>Penilaian Alternatif</span>
         </a>
     </li>
 
@@ -95,6 +95,15 @@
 
     <!-- Tambahan Style untuk Sidebar Title -->
     <style>
+        body.sidebar-toggled .sidebar .sidebar-brand-icon img {
+            width: 40px !important;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar .sidebar-brand-icon img {
+            transition: all 0.3s ease;
+        }
+
         .sidebar-title .title-main {
             font-size: 0.95rem;
         }

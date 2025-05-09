@@ -2,9 +2,11 @@
 @section('title', 'SPK SAW | Perhitungan Entropi')
 
 @section('content')
+
+<!-- PENILAIAN ALTERNATIF -->
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Perhitungan Entropi</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Tahap Penilaian Alternatif</h6>
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -52,7 +54,7 @@
 <div class="card shadow mb-4">
     <a href="#normalisasi" class="d-block card-header py-3" data-toggle="collapse"
         role="button" aria-expanded="true" aria-controls="collapseCardExample">
-        <h6 class="m-0 font-weight-bold text-primary">Tahap Normalisasi (Entropy)</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Tahap Normalisasi (ENTROPI)</h6>
     </a>
     <div class="collapse show" id="normalisasi">
         <div class="card-body">
@@ -92,7 +94,7 @@
 <div class="card shadow mb-4">
     <a href="#proporsi" class="d-block card-header py-3" data-toggle="collapse"
         role="button" aria-expanded="true" aria-controls="collapseCardExample">
-        <h6 class="m-0 font-weight-bold text-primary">Tahap Proporsi</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Tahap Proyeksi</h6>
     </a>
     <div class="collapse show" id="proporsi">
         <div class="card-body">
@@ -129,7 +131,7 @@
 <!-- TABEL ENTROPI -->
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Tahap Perhitungan Entropi (Pij x ln(Pij))</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Tahap Perhitungan Entropi</h6>
     </div>
     <div class="card-body">
         <div class="table-responsive">

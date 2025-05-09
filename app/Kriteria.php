@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Kriteria extends Model
 {
-    protected $table = 'kriteria';
+    protected $table = 'kriterias';
     protected $guarded = [];
 
     public function crips()

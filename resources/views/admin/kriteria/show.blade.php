@@ -11,7 +11,7 @@
                 <!-- Card Header - Accordion -->
                 <a href="#tambahcrips" class="d-block card-header py-3" data-toggle="collapse"
                     role="button" aria-expanded="true" aria-controls="collapseCardExample">
-                    <h6 class="m-0 font-weight-bold text-primary">Tambah Crips</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Tambah Data Sub Krtiteria (Crips)</h6>
                 </a>
                 <!-- Card Content - Collapse -->
                 <div class="collapse show" id="tambahkcrips">
@@ -38,7 +38,7 @@
                                 @enderror
                             </div>
                             <div class="form-group">
-                                <label for="bobot">Bobot Kriteria</label>
+                                <label for="bobot">Skala</label>
                                 <input type="text" class="form-control @error('bobot') is invalid @enderror" name="bobot" value="{{ old('bobot') }}">
 
                                 @error('bobot')
@@ -58,7 +58,7 @@
                 <!-- Card Header - Accordion -->
                 <a href="#listkriteria" class="d-block card-header py-3" data-toggle="collapse"
                     role="button" aria-expanded="true" aria-controls="collapseCardExample">
-                    <h6 class="m-0 font-weight-bold text-primary">List Crips</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Daftar Data Sub Kriteria (Crips)</h6>
                 </a>
                 <!-- Card Content - Collapse -->
                 <div class="collapse show" id="listkriteria">
@@ -68,8 +68,8 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Nama Crips</th>
-                                        <th>Bobot</th>
+                                        <th>Nama Sub Kriteria (Crips)</th>
+                                        <th>Skala</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>

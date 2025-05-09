@@ -13,7 +13,7 @@ class CreatePenilaiansTable extends Migration
      */
     public function up()
     {
-        Schema::create('penilaian', function (Blueprint $table) {
+        Schema::create('penilaians', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('alternatif_id');
             $table->unsignedBigInteger('crips_id');

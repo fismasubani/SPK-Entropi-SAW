@@ -11,7 +11,7 @@ class EntropiController extends Controller
 {
     public function index()
     {
-        $kriteria = Kriteria::orderBy('nama_kriteria', 'asc')->get();
+        $kriteria = Kriteria::orderBy('id', 'asc')->get();
         $alternatif = Alternatif::with('penilaian.crips')->get();
         $penilaian = Penilaian::all();
 
