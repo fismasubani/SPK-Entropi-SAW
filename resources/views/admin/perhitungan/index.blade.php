@@ -235,8 +235,8 @@
                     <div class="form-group">
                         <label for="metode">Metode Perhitungan</label>
                         <select class="form-control" id="metode" name="metode" required>
-                            <option value="SAW">Entropi-SAW</option>
-                            <option value="Entropi-SAW">SAW</option>
+                            <option value="Entropi-SAW">Entropi-SAW</option>
+                            <option value="SAW">SAW</option>
                         </select>
                     </div>
                 </div>
