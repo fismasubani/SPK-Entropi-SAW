@@ -2,19 +2,28 @@
 @section('title', 'SPK SAW | Perhitungan SAW')
 @section('content')
 
-@section('content')
-
 @if (isset($message))
     <div class="alert alert-warning">
         {{ $message }}
     </div>
 @endif
 
+<!-- TOMBOL -->
+
 @if (!isset($isPdf))
 <div class="d-flex justify-content-end mb-4">
+    <!-- Simpan Hasil -->
+    <button type="button" class="btn btn-success mr-2" data-toggle="modal" data-target="#modalSimpanHasil">
+        <i class="fas fa-save"></i> Simpan Hasil
+    </button>
+    <!-- Cetak PDF -->
     <a href="{{ route('perhitungan.cetak') }}" target="_blank" class="btn btn-danger">
         <i class="fas fa-file-pdf"></i> Cetak PDF
     </a>
+    <!-- Simpan Hasil -->
+    <!-- <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalSimpanHasil">
+        <i class="fas fa-save"></i> Simpan Hasil
+    </button> -->
 </div>
 @endif
 
@@ -203,5 +212,43 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Simpan Hasil -->
+<div class="modal fade" id="modalSimpanHasil" tabindex="-1" role="dialog" aria-labelledby="modalSimpanHasilLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form action="{{ route('perhitungan.simpan') }}" method="POST">
+            @csrf
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalSimpanHasilLabel">Simpan Hasil Perhitungan</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="nama_perhitungan">Nama Perhitungan</label>
+                        <input type="text" class="form-control" id="nama_perhitungan" name="nama_perhitungan" required placeholder="Masukkan nama perhitungan">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="metode">Metode Perhitungan</label>
+                        <select class="form-control" id="metode" name="metode" required>
+                            <option value="SAW">Entropi-SAW</option>
+                            <option value="Entropi-SAW">SAW</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 
 @endsection

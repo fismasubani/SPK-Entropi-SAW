@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Alternatif;
 use App\Kriteria;
 use App\Penilaian;
+use App\RiwayatPerhitungan;
+use App\RiwayatDetail;
+use Carbon\Carbon;
 use PDF;
 
 class AlgoritmaController extends Controller
@@ -17,6 +21,7 @@ class AlgoritmaController extends Controller
 
     public function index()
     {
+        // Ambil data yang sama seperti di index
         $alternatif = Alternatif::with('penilaian.crips')->get();
         $kriteria = Kriteria::with('crips')->orderBy('id', 'ASC')->get();
         $penilaian = Penilaian::with('crips', 'alternatif')->get();
@@ -104,6 +109,85 @@ class AlgoritmaController extends Controller
         return view('admin.perhitungan.index', compact(
             'alternatif', 'kriteria', 'normalisasi', 'ranking', 'peringkat', 'rataRata', 'tingkatKesesuaian'
         ));
+    }
+
+    public function simpanRiwayat(Request $request)
+    {
+        $request->validate([
+            'nama_perhitungan' => 'required|string|max:255',
+            'metode' => 'required|in:SAW,Entropi-SAW',
+        ]);
+
+        // Ambil data yang sama seperti di index
+        $alternatif = Alternatif::with('penilaian.crips')->get();
+        $kriteria = Kriteria::with('crips')->orderBy('id', 'ASC')->get();
+        $penilaian = Penilaian::with('crips', 'alternatif')->get();
+
+        $minMax = [];
+        foreach ($kriteria as $value) {
+            foreach ($penilaian as $value_1) {
+                if ($value->id == $value_1->crips->kriteria_id) {
+                    $minMax[$value->id][] = $value_1->crips->bobot;
+                }
+            }
+        }
+
+        $normalisasi = [];
+        foreach ($penilaian as $value_1) {
+            foreach ($kriteria as $value) {
+                if ($value->id == $value_1->crips->kriteria_id) {
+                    $bobot = $value_1->crips->bobot;
+                    $max = max($minMax[$value->id] ?? [1]);
+                    $min = min($minMax[$value->id] ?? [1]);
+
+                    if ($value->attribut == 'Benefit') {
+                        $normalisasi[$value_1->alternatif->nama_alternatif][$value->id] = $max != 0 ? ($bobot / $max) : 0;
+                    } elseif ($value->attribut == 'Cost') {
+                        $normalisasi[$value_1->alternatif->nama_alternatif][$value->id] = $bobot != 0 ? ($min / $bobot) : 0;
+                    }
+                }
+            }
+        }
+
+        $rank = [];
+        foreach ($normalisasi as $key => $value) {
+            foreach ($kriteria as $k) {
+                if (isset($value[$k->id])) {
+                    $rank[$key][] = $value[$k->id] * $k->bobot;
+                }
+            }
+        }
+
+        $ranking = [];
+        foreach ($rank as $key => $value) {
+            $ranking[$key] = array_sum($value);
+        }
+
+        arsort($ranking);
+
+        // Buat riwayat_perhitungan
+        $riwayat = RiwayatPerhitungan::create([
+            'nama_perhitungan' => $request->nama_perhitungan,
+            'tanggal_perhitungan' => Carbon::now(),
+            'jumlah_alternatif' => count($ranking),
+            'kriteria_json' => json_encode($kriteria),
+            'metode' => $request->metode,
+            'user_id' => Auth::id(),
+        ]);
+
+        // Simpan detail
+        $peringkat = 1;
+        foreach ($ranking as $nama => $skor) {
+            RiwayatDetail::create([
+                'riwayat_id' => $riwayat->id,
+                'nama_alternatif' => $nama,
+                'nilai_kriteria_json' => json_encode($normalisasi[$nama]),
+                'skor_akhir' => $skor,
+                'peringkat' => $peringkat++,
+            ]);
+        }
+
+        return redirect()->route('admin.perhitungan.index')->with('success', 'Hasil perhitungan berhasil disimpan ke riwayat.');
     }
 
     public function cetak()
