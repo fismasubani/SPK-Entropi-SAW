@@ -187,7 +187,7 @@ class AlgoritmaController extends Controller
             ]);
         }
 
-        return redirect()->route('admin.perhitungan.index')->with('success', 'Hasil perhitungan berhasil disimpan ke riwayat.');
+        return redirect()->route('perhitungan.index')->with('success', 'Hasil perhitungan berhasil disimpan ke riwayat.');
     }
 
     public function cetak()
