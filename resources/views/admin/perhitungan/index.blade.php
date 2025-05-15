@@ -16,14 +16,6 @@
     <button type="button" class="btn btn-success mr-2" data-toggle="modal" data-target="#modalSimpanHasil">
         <i class="fas fa-save"></i> Simpan Hasil
     </button>
-    <!-- Cetak PDF -->
-    <a href="{{ route('perhitungan.cetak') }}" target="_blank" class="btn btn-danger">
-        <i class="fas fa-file-pdf"></i> Cetak PDF
-    </a>
-    <!-- Simpan Hasil -->
-    <!-- <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalSimpanHasil">
-        <i class="fas fa-save"></i> Simpan Hasil
-    </button> -->
 </div>
 @endif
 

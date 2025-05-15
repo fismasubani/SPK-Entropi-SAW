@@ -21,8 +21,11 @@ Auth::routes();
 Route::middleware('auth')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 });
+
 Route::get('/dashboard/{id}', [DashboardController::class, 'show'])->name('dashboard.show');
+Route::patch('/riwayat-perhitungan/{id}/info', [DashboardController::class, 'updateInfo'])->name('riwayat-perhitungan.updateInfo');
 Route::delete('/dashboard/{id}', [DashboardController::class, 'destroy'])->name('dashboard.destroy');
+Route::get('/riwayat-perhitungan', [DashboardController::class, 'index'])->name('riwayat-perhitungan.index');
 Route::get('/dashboard/{id}/cetak', [DashboardController::class, 'cetakPDF'])->name('dashboard.cetak');
 
 Route::resource("kriteria", "KriteriaController")->except(['create']);
@@ -38,4 +41,3 @@ Route::get('/entropi', [EntropiController::class, 'index'])->name('entropi.index
 
 Route::get('/perhitungan', [AlgoritmaController::class, 'index'])->name('perhitungan.index');
 Route::post('/perhitungan/simpan', [AlgoritmaController::class, 'simpanRiwayat'])->name('perhitungan.simpan');
-Route::get('/perhitungan/cetak-pdf', [AlgoritmaController::class, 'cetak'])->name('perhitungan.cetak');
