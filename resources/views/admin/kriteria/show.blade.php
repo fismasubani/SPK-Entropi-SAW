@@ -111,8 +111,8 @@
 
             $('.hapus').on('click', function(){
                 swal({
-                    title: "Apa kamu yakin?",
-                    text: "Sekali kamu hapus, data tidak bisa dipulihkan!",
+                    title: "Apa Anda yakin?",
+                    text: "Sekali Anda hapus, data tidak bisa dipulihkan kembali!",
                     icon: "warning",
                     buttons: true,
                     dangerMode: true,
