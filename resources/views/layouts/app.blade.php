@@ -7,6 +7,15 @@
 
     @yield('css')
 
+    <!-- Primary Favicon -->
+    <link rel="icon" href="/img/logo-smp-8.png?v=1.3" type="image/png">
+
+    <!-- Fallback dengan cache busting -->
+    <link rel="shortcut icon" href="/img/logo-smp-8.png?v=1.3">
+    
+    <!-- Paksa tidak cache -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+
 </head>
 
 <body id="page-top">

@@ -10,6 +10,7 @@
     <meta name="author" content="">
 
     <title>SPK Entropi-SAW | Login</title>
+    <link rel="icon" href="/img/logo-smp-8.png?v=1.4" type="image/png">
 
     <!-- Custom fonts for this template-->
     <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
