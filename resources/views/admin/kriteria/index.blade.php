@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'SPK SAW | Kriteria')
+@section('title', 'SPK Entropi-SAW | Kriteria')
 @section('css')
 <!-- Custom styles for this page -->
 <link href="{{ asset('vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
@@ -128,8 +128,8 @@
 
             $('.hapus').on('click', function(){
                 swal({
-                    title: "Apa kamu yakin?",
-                    text: "Sekali kamu hapus, data tidak bisa dipulihkan!",
+                    title: "Apa Anda yakin?",
+                    text: "Sekali Anda hapus, data tidak bisa dipulihkan kembali!",
                     icon: "warning",
                     buttons: true,
                     dangerMode: true,

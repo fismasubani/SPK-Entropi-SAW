@@ -15,6 +15,24 @@ class EntropiController extends Controller
         $alternatif = Alternatif::with('penilaian.crips')->get();
         $penilaian = Penilaian::all();
 
+        //Jika tidak ada data penilaian, langsung tampilkan view dengan pesan
+        if ($penilaian->isEmpty()) {
+            return view('admin.perhitungan.entropi.index', [
+                'kriteria' => [],
+                'alternatif'=> [],
+                'penilaian'=> [],
+                'normalisasi'=> [],
+                'total_normalisasi_per_kriteria'=> [],
+                'proporsi'=> [],
+                'pij_ln_pij'=> [],
+                'total_pij_ln_pij'=> [],
+                'entropi'=> [],
+                'dispersi'=> [],
+                'bobot'=> [],
+                'message' => 'Belum ada data penilaian yang tersedia.'
+            ]);
+        }
+
         // Ambil semua nilai bobot dulu
         $minMax = [];
         foreach ($penilaian as $pen) {

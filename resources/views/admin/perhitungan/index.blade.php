@@ -1,18 +1,22 @@
 @extends('layouts.app')
-@section('title', 'SPK SAW | Perhitungan SAW')
+@section('title', 'SPK Entropi-SAW | Perhitungan SAW')
 @section('content')
 
+<!-- Menampilkan Pesan Belum Ada Data -->
 @if (isset($message))
     <div class="alert alert-warning">
         {{ $message }}
     </div>
 @endif
 
-<!-- TOMBOL -->
+<!-- Menampilkan Pesan Berhasil Simpan Data -->
+@if(session('success'))
+    <div class="alert alert-success">{{ session('success') }}</div>
+@endif
 
+<!-- Tombol Simpan Hasil -->
 @if (!isset($isPdf))
 <div class="d-flex justify-content-end mb-4">
-    <!-- Simpan Hasil -->
     <button type="button" class="btn btn-success mr-2" data-toggle="modal" data-target="#modalSimpanHasil">
         <i class="fas fa-save"></i> Simpan Hasil
     </button>
@@ -20,7 +24,6 @@
 @endif
 
 <!-- PENILAIAN ALTERNATIF -->
-
 <div class="card shadow mb-4">
     <!-- Card Header - Accordion -->
     <a href="#tambahkriteria" class="d-block card-header py-3" data-toggle="collapse"
@@ -52,7 +55,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="{{ count($kriteria) + 1 }}" class="text-center">Tidak ada data</td>
+                                <td colspan="{{ count($kriteria) + 1 }}" class="text-center">Tidak ada data penilaian</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -74,7 +77,7 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>Alternatif / Kriteria</th>
+                            <th>Nama Alternatif</th>
                             @foreach($kriteria as $value)
                                 <th>{{ $value->nama_kriteria }}</th>
                             @endforeach
@@ -92,7 +95,7 @@
                             @endforeach
                         @else
                             <tr>
-                                <td colspan="{{ count($kriteria) + 1 }}" class="text-center">Tidak ada data</td>
+                                <td colspan="{{ count($kriteria) + 1 }}" class="text-center">Tidak ada data normalisasi</td>
                             </tr>
                         @endif
                     </tbody>
@@ -191,7 +194,7 @@
                     <tbody>
                         <tr>
                             <th>Nilai Rata-rata Metode SAW</th>
-                            <td>{{ number_format($rataRata, 3) }}</td>
+                            <td>{{ number_format($rataRata, 4) }}</td>
                         </tr>
                         <tr>
                             <th>Tingkat Kesesuaian Metode SAW</th>
@@ -241,6 +244,4 @@
         </form>
     </div>
 </div>
-
-
 @endsection

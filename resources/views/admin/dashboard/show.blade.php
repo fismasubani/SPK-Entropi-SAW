@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title', 'SPK Entropi-SAW | Lihat Detail')
 @section('content')
 
 {{-- Informasi Umum Riwayat Perhitungan --}}
@@ -72,7 +72,7 @@
 <div class="card shadow mb-4">
     <a href="#ranking" class="d-block card-header py-3" data-toggle="collapse"
         role="button" aria-expanded="true" aria-controls="collapseCardExample">
-        <h6 class="m-0 font-weight-bold text-primary">Hasil Detail Perhitungan</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Detail Hasil Perhitungan</h6>
     </a>
     <div class="collapse show" id="ranking">
         <div class="card-body">
@@ -106,7 +106,7 @@
                                     @endphp
                                     <td>{{ number_format($preferensi, 4) }}</td>
                                 @endforeach
-                                <td>{{ number_format($d->skor_akhir, 4) }}</td>
+                                <td>{{ number_format($total, 4) }}</td>
                                 <td>{{ $d->peringkat }}</td>
                             </tr>
                         @endforeach
@@ -115,7 +115,5 @@
             </div>
         </div>
     </div>
-</div>
-
-    
+</div>    
 @endsection

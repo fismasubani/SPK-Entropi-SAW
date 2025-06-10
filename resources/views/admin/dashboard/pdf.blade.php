@@ -131,7 +131,7 @@
 
     <h4 style="text-align: center;">
         HASIL PERINGKAT ALTERNATIF <br>
-        PEMILIHAN KEPALA LABORATORIUM SMPN 8 KOTA PASURUAN
+        {{ strtoupper($data->nama_perhitungan) }}
     </h4>
 
     <table>

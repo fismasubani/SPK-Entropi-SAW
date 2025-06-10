@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'SPK SAW | '.$kriteria->nama_kriteria)
+@section('title', 'SPK Entropi-SAW | '.$kriteria->nama_kriteria)
 @section('css')
 <!-- Custom styles for this page -->
 <link href="{{ asset('vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
@@ -11,7 +11,7 @@
                 <!-- Card Header - Accordion -->
                 <a href="#tambahcrips" class="d-block card-header py-3" data-toggle="collapse"
                     role="button" aria-expanded="true" aria-controls="collapseCardExample">
-                    <h6 class="m-0 font-weight-bold text-primary">Tambah Data Sub Krtiteria (Crips)</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Tambah Data Sub Krtiteria {{ $kriteria->nama_kriteria }} (Crips)</h6>
                 </a>
                 <!-- Card Content - Collapse -->
                 <div class="collapse show" id="tambahkcrips">
@@ -28,7 +28,7 @@
                             @csrf
                             <input type="hidden" value="{{ $kriteria->id }}" name="kriteria_id">
                             <div class="form-group">
-                                <label for="nama">Nama Crips</label>
+                                <label for="nama">Nama Sub Kriteria (Crips)</label>
                                 <input type="text" class="form-control @error('nama_crips') is invalid @enderror" name="nama_crips" value="{{ old('nama_crips') }}">
 
                                 @error('nama_crips')
@@ -58,7 +58,7 @@
                 <!-- Card Header - Accordion -->
                 <a href="#listkriteria" class="d-block card-header py-3" data-toggle="collapse"
                     role="button" aria-expanded="true" aria-controls="collapseCardExample">
-                    <h6 class="m-0 font-weight-bold text-primary">Daftar Data Sub Kriteria (Crips)</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Daftar Data Sub Kriteria {{ $kriteria->nama_kriteria }} (Crips)</h6>
                 </a>
                 <!-- Card Content - Collapse -->
                 <div class="collapse show" id="listkriteria">

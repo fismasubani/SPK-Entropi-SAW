@@ -21,7 +21,7 @@ class CripsController extends Controller
             $crips->nama_crips = $request->nama_crips;
             $crips->bobot = $request->bobot;
             $crips->save();
-            return back()->with('msg', 'Berhasil menambahkan data');
+            return back()->with('msg', 'Data berhasil disimpan');
         } catch (Exception $e) {
             \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
             die("Gagal");
@@ -43,7 +43,7 @@ class CripsController extends Controller
                 'nama_crips'    => $request->nama_crips,
                 'bobot'         => $request->bobot
             ]);
-            return back()->with('msg', 'Berhasil merubah data');
+            return back()->with('msg', 'Data berhasil diubah');
         } catch (Exception $e) {
             \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
             die("Gagal");

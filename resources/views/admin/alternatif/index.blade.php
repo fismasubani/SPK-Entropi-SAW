@@ -11,7 +11,7 @@
                 <!-- Card Header - Accordion -->
                 <a href="#tambahalternatif" class="d-block card-header py-3" data-toggle="collapse"
                     role="button" aria-expanded="true" aria-controls="collapseCardExample">
-                    <h6 class="m-0 font-weight-bold text-primary">Tambah Alternatif</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Tambah Data Alternatif</h6>
                 </a>
                 <!-- Card Content - Collapse -->
                 <div class="collapse show" id="tambahalternatif">
@@ -47,7 +47,7 @@
                 <!-- Card Header - Accordion -->
                 <a href="#listalternatif" class="d-block card-header py-3" data-toggle="collapse"
                     role="button" aria-expanded="true" aria-controls="collapseCardExample">
-                    <h6 class="m-0 font-weight-bold text-primary">List Alternatif</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Daftar Data Alternatif</h6>
                 </a>
                 <!-- Card Content - Collapse -->
                 <div class="collapse show" id="listalternatif">
@@ -98,8 +98,8 @@
 
             $('.hapus').on('click', function(){
                 swal({
-                    title: "Apa kamu yakin?",
-                    text: "Sekali kamu hapus, data tidak bisa dipulihkan!",
+                    title: "Apa Anda yakin?",
+                    text: "Sekali Anda hapus, data tidak bisa dipulihkan kembali!",
                     icon: "warning",
                     buttons: true,
                     dangerMode: true,

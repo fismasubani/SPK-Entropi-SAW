@@ -35,7 +35,6 @@ class DashboardController extends Controller
 
         return view('admin.dashboard.show', compact('data', 'kriteria', 'normalisasi'));
 
-        //return view('admin.dashboard.show', compact('data')); // file: resources/views/dashboard/show.blade.php
     }
 
     public function updateInfo(Request $request, $id)
@@ -48,6 +47,8 @@ class DashboardController extends Controller
         $riwayat = RiwayatPerhitungan::findOrFail($id);
         $riwayat->nama_perhitungan = $request->nama_perhitungan;
         $riwayat->metode = $request->metode;
+        // Tambahkan pengguna yang memperbarui data ini
+        $riwayat->user_id = auth()->id();
         $riwayat->save();
 
         return redirect()->back()->with('success', 'Nama perhitungan dan metode berhasil diperbarui.');
@@ -77,6 +78,6 @@ class DashboardController extends Controller
         }
 
         $pdf = PDF::loadView('admin.dashboard.pdf', compact('data','kriteria', 'normalisasi'))->setPaper('a4', 'portrait');
-        return $pdf->stream('riwayat-'.$data->nama.'.pdf');
+        return $pdf->stream('LAPORAN HASIL PERANGKINGAN '.$data->nama_perhitungan.'.pdf');
     }
 }

@@ -33,7 +33,7 @@ class KriteriaController extends Controller
             $kriteria->attribut = $request->attribut;
             $kriteria->bobot = $request->bobot;
             $kriteria->save();
-            return back()->with('msg','Berhasil menambahkan data');
+            return back()->with('msg','Data berhasil disimpan');
 
         } catch (Exception $e) {
             \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
@@ -62,7 +62,7 @@ class KriteriaController extends Controller
                 'attribut'      => $request->attribut,
                 'bobot'         => $request->bobot,
             ]);
-            return back()->with('msg','Berhasil merubah data');
+            return back()->with('msg','Data berhasil diubah');
 
         } catch (Exception $e) {
             \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());

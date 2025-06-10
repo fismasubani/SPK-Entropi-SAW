@@ -28,7 +28,7 @@ class AlternatifController extends Controller
             $alternatif = new Alternatif();
             $alternatif->nama_alternatif = $request->nama_alternatif;
             $alternatif->save();
-            return back()->with('msg','Berhasil menambahkan data');
+            return back()->with('msg','Data berhasil disimpan');
 
         } catch (Exception $e) {
             \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
@@ -53,7 +53,7 @@ class AlternatifController extends Controller
             $alternatif->update([
                 'nama_alternatif' => $request->nama_alternatif,
             ]);
-            return back()->with('msg','Berhasil merubah data');
+            return back()->with('msg','Data berhasil diubah');
 
         } catch (Exception $e) {
             \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());

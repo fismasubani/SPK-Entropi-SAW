@@ -32,7 +32,7 @@ class PenilaianController extends Controller
                 }
             }
 
-            return back()->with('msg', 'Berhasil disimpan');
+            return back()->with('msg', 'Data penilaian berhasil disimpan');
         } catch (Exception $e) {
             \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
             die("Gagal");

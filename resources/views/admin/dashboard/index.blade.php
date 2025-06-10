@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('title', 'SPK Entropi-SAW | Dashboard')
 @section('css')
 <!-- Custom styles for this page -->
 <link href="{{ asset('vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
@@ -27,7 +28,6 @@
                             <li>Membuka menu perhitungan <strong>Metode Entropi</strong> untuk menentukan nilai bobot ideal dan menggunakan tombol <strong>Gunakan Bobot</strong>.</li>
                             <li>Membuka menu perhitungan <strong>Metode SAW</strong> untuk mendapatkan hasil peringkat alternatif terbaik.</li>
                             <li>Menggunakan tombol <strong>Simpan Hasil</strong> untuk menyimpan hasil perhitungan dengan mengisi nama dan metode perhitungan ke tabel riwayat hasil perhitungan.</li>
-                            <li>Menggunakan tombol <strong>Cetak PDF</strong> untuk mencetak laporan hasil metode Entropi-SAW.</li>
                             <li><strong>Riwayat Hasil Perhitungan</strong> digunakan sebagai record data dari hasil perhitungan metode Entropi-SAW atau SAW yang telah dilakukan. Selain itu, terdapat 3 aksi utama: <strong>Lihat</strong>, <strong>Cetak</strong>, dan <strong>Hapus</strong>.</li>
                             <li>Aksi <strong>Lihat</strong> untuk melihat detail riwayat perhitungan yang telah disimpan.</li>
                             <li>Aksi <strong>Cetak</strong> untuk mencetak laporan hasil perhitungan yang telah disimpan.</li>
@@ -94,6 +94,7 @@
     </div>
 </div>
 @endsection
+
 @section('js')
 <!-- SweetAlert & DataTables -->
 <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
@@ -110,8 +111,8 @@
             const form = this;
 
             swal({
-                title: "Apa kamu yakin?",
-                text: "Sekali kamu hapus, data tidak bisa dipulihkan!",
+                title: "Apa Anda yakin?",
+                text: "Sekali Anda hapus, data tidak bisa dipulihkan kembali!",
                 icon: "warning",
                 buttons: true,
                 dangerMode: true,
