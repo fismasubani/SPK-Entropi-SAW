@@ -9,31 +9,32 @@ use Illuminate\Http\Request;
 
 class EntropiController extends Controller
 {
+
     public function index()
     {
         $kriteria = Kriteria::orderBy('id', 'asc')->get();
         $alternatif = Alternatif::with('penilaian.crips')->get();
         $penilaian = Penilaian::all();
 
-        //Jika tidak ada data penilaian, langsung tampilkan view dengan pesan
+        // Jika tidak ada data penilaian
         if ($penilaian->isEmpty()) {
             return view('admin.perhitungan.entropi.index', [
                 'kriteria' => [],
-                'alternatif'=> [],
-                'penilaian'=> [],
-                'normalisasi'=> [],
-                'total_normalisasi_per_kriteria'=> [],
-                'proporsi'=> [],
-                'pij_ln_pij'=> [],
-                'total_pij_ln_pij'=> [],
-                'entropi'=> [],
-                'dispersi'=> [],
-                'bobot'=> [],
-                'message' => 'Belum ada data penilaian yang tersedia.'
+                'alternatif' => [],
+                'normalisasi' => [],
+                'totalNormalisasiPerKriteria' => [],
+                'proporsi' => [],
+                'pijLnPij' => [],
+                'totalPijLnPij' => [],
+                'entropi' => [],
+                'dispersi' => [],
+                'bobot' => [],
+                'message' => 'Belum ada data penilaian.'
             ]);
         }
 
-        // Ambil semua nilai bobot dulu
+        // Tahap Normalisasi (Entropi)
+        // Step 1: Hitung min/max per kriteria untuk normalisasi
         $minMax = [];
         foreach ($penilaian as $pen) {
             if ($pen->crips) {
@@ -41,78 +42,78 @@ class EntropiController extends Controller
             }
         }
 
-        // Normalisasi
+        // Step 2: Normalisasi matriks (gunakan nilai maksimum)
         $normalisasi = [];
-        foreach ($penilaian as $value_1) {
-            foreach ($kriteria as $value) {
-                if ($value_1->crips && $value->id == $value_1->crips->kriteria_id) {
-                    $max = max($minMax[$value->id] ?? [1]); // fallback ke 1 untuk mencegah pembagian dengan 0
-                    $normalisasi[$value_1->alternatif->nama_alternatif][$value->id] = 
-                        $value_1->crips->bobot / $max;
-                }
+        foreach ($penilaian as $pen) {
+            if ($pen->crips) {
+                $kriteriaId = $pen->crips->kriteria_id;
+                $max = max($minMax[$kriteriaId] ?? [1]);
+                $normalisasi[$pen->alternatif->nama_alternatif][$kriteriaId] = $pen->crips->bobot / $max;
             }
         }
 
-        // Hitung total normalisasi per kriteria
-        $total_normalisasi_per_kriteria = [];
+        // Tahap Proporsi/Proyeksi
+        // Step 3: Hitung total normalisasi per kriteria
+        $totalNormalisasiPerKriteria = [];
         foreach ($kriteria as $krit) {
-            $id_krit = $krit->id;
             $total = 0;
-            foreach ($normalisasi as $alt => $nilai) {
-                $total += $nilai[$id_krit] ?? 0;
+            foreach ($normalisasi as $altValues) {
+                $total += $altValues[$krit->id] ?? 0;
             }
-            $total_normalisasi_per_kriteria[$id_krit] = $total;
+            $totalNormalisasiPerKriteria[$krit->id] = $total;
         }
 
-        // Hitung proporsi p_ij
+        // Step 4: Hitung proporsi (p_ij)
         $proporsi = [];
-        foreach ($normalisasi as $alt => $nilai) {
-            foreach ($nilai as $id_krit => $v) {
-                $total = $total_normalisasi_per_kriteria[$id_krit] ?? 1; // fallback ke 1
-                $proporsi[$alt][$id_krit] = $v / $total;
+        foreach ($normalisasi as $altName => $altValues) {
+            foreach ($altValues as $kritId => $value) {
+                $total = $totalNormalisasiPerKriteria[$kritId] ?? 1;
+                $proporsi[$altName][$kritId] = $value / $total;
             }
         }
 
-        // Hitung p_ij * ln(p_ij)
-        $pij_ln_pij = [];
-        foreach ($proporsi as $alt => $nilai) {
-            foreach ($nilai as $id_krit => $v) {
-                $pij_ln_pij[$alt][$id_krit] = ($v > 0) ? $v * log($v) : 0;
+        // Tahap Entropi
+        // Step 5: Hitung p_ij * ln(p_ij) (gunakan log() natural)
+        $pijLnPij = [];
+        foreach ($proporsi as $altName => $altValues) {
+            foreach ($altValues as $kritId => $pij) {
+                $pijLnPij[$altName][$kritId] = ($pij > 0) ? $pij * log($pij) : 0;
             }
         }
 
-        // Hitung total p_ij * ln(p_ij) per kriteria
-        $total_pij_ln_pij = [];
+        // Step 6: Hitung total p_ij * ln(p_ij) per kriteria
+        $totalPijLnPij = [];
         foreach ($kriteria as $krit) {
-            $id_krit = $krit->id;
             $total = 0;
-            foreach ($pij_ln_pij as $alt => $nilai) {
-                $total += $nilai[$id_krit] ?? 0;
+            foreach ($pijLnPij as $altValues) {
+                $total += $altValues[$krit->id] ?? 0;
             }
-            $total_pij_ln_pij[$id_krit] = $total;
+            $totalPijLnPij[$krit->id] = $total;
         }
 
-        // Hitung entropi per kriteria
-        $n = count($alternatif); // jumlah alternatif
+        // Step 7: Hitung entropi (e_j)
+        $n = max(count($alternatif), 1); // Pastikan n >= 1
         $entropi = [];
-        foreach ($total_pij_ln_pij as $id_krit => $total) {
-            $entropi[$id_krit] = ($n > 1) ? (-1 / log($n)) * $total : 0;
+        foreach ($totalPijLnPij as $kritId => $total) {
+            $entropi[$kritId] = ($n > 1) ? (-1 / log($n)) * $total : 0;
         }
 
-        // Hitung dispersi
+        // Tahap Dispersi
+        // Step 8: Hitung dispersi (d_j = 1 - e_j)
         $dispersi = [];
-        foreach ($kriteria as $krit) {
-            $id_krit = $krit->id;
-            $dispersi[$id_krit] = 1 - ($entropi[$id_krit] ?? 0);
+        foreach ($entropi as $kritId => $ej) {
+            $dispersi[$kritId] = 1 - $ej;
         }
 
-        // Hitung Bobot
-        $total_dispersi = array_sum($dispersi);
+        // Tahap Bobot
+        // Step 9: Hitung bobot (w_j = d_j / total dispersi)
+        $totalDispersi = array_sum($dispersi);
         $bobot = [];
-        foreach ($dispersi as $id_kriteria => $nilai) {
-            $bobot[$id_kriteria] = ($total_dispersi != 0) ? $nilai / $total_dispersi : 0;
+        foreach ($dispersi as $kritId => $dj) {
+            $bobot[$kritId] = ($totalDispersi != 0) ? $dj / $totalDispersi : 0;
         }
 
+        // Simpan bobot ke session
         session(['bobot' => $bobot]);
 
         return view('admin.perhitungan.entropi.index', compact(
@@ -120,10 +121,10 @@ class EntropiController extends Controller
             'alternatif',
             'penilaian',
             'normalisasi',
-            'total_normalisasi_per_kriteria',
+            'totalNormalisasiPerKriteria',
             'proporsi',
-            'pij_ln_pij',
-            'total_pij_ln_pij',
+            'pijLnPij',
+            'totalPijLnPij',
             'entropi',
             'dispersi',
             'bobot'

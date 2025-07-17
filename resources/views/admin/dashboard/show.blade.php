@@ -104,9 +104,9 @@
                                         $preferensi = $nilai * $k->bobot;
                                         $total += $preferensi;
                                     @endphp
-                                    <td>{{ number_format($preferensi, 4) }}</td>
+                                    <td>{{ number_format($preferensi, 5) }}</td>
                                 @endforeach
-                                <td>{{ number_format($total, 4) }}</td>
+                                <td>{{ number_format($total, 5) }}</td>
                                 <td>{{ $d->peringkat }}</td>
                             </tr>
                         @endforeach

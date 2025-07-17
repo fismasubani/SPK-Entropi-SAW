@@ -19,7 +19,6 @@ class PenilaianController extends Controller
 
     public function store(Request $request)
     {
-        // return response()->json($request);
         try {
             DB::select("TRUNCATE penilaians");
             foreach ($request->crips_id as $key => $value) {

@@ -105,7 +105,7 @@
     </div>
 </div>
 
-<!-- PERANGKINGAN -->
+<!-- TAHAP PERHITUNGAN PREFERENSI -->
 <div class="card shadow mb-4">
     <a href="#ranking" class="d-block card-header py-3" data-toggle="collapse"
         role="button" aria-expanded="true" aria-controls="collapseCardExample">
@@ -167,9 +167,9 @@
                                             $hasil = $nilai_normalisasi * $bobot;
                                             $total += $hasil;
                                         @endphp
-                                        <td>{{ number_format($hasil, 4) }}</td>
+                                        <td>{{ number_format($hasil, 5) }}</td>
                                     @endforeach
-                                    <td>{{ number_format($total, 4) }}</td>
+                                    <td>{{ number_format($total, 5) }}</td>
                                     <td>{{ $ranked[$alt] }}</td>
                                 </tr>
                             @endforeach

@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Laporan Hasil Perhitungan</title>
+    <title>Laporan Hasil Perangkingan</title>
     <style>
         body {
             font-family: 'Times New Roman', Times, serif;
@@ -117,7 +117,7 @@
                             $preferensi = $nilai * $k->bobot;
                             $total += $preferensi;
                         @endphp
-                        <td>{{ number_format($preferensi, 4) }}</td>
+                        <td>{{ number_format($preferensi, 5) }}</td>
                     @endforeach
                 </tr>
             @endforeach
@@ -159,16 +159,17 @@
                                 $total_skor += $nilai * $k->bobot;
                             @endphp
                         @endforeach
-                        {{ number_format($total_skor, 4) }}
+                        {{ number_format($total_skor, 5) }}
                     </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
 
-    <div class="ttd">
-        <div class="kanan">
-            Pasuruan, {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}<br>
+    <div style="position: relative; margin-top: 50px;">
+        <div style="position: absolute; right: 10px; text-align: left; width: 210px;">
+            <span style="display: inline-block; width: 100px;">Dicetak di</span>: Pasuruan<br>
+            <span style="display: inline-block; width: 100px;">Pada tanggal</span>: {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}<br>
             Kepala UPT SMPN 8 Pasuruan<br><br><br><br><br><br>
             <strong><u>Arif Syaifurrohman, S.Pd</u></strong><br>
             NIP. 198106202009041003

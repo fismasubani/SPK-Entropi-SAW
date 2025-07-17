@@ -21,12 +21,10 @@ class AlgoritmaController extends Controller
 
     public function index()
     {
-        // Ambil data yang sama seperti di index
         $alternatif = Alternatif::with('penilaian.crips')->get();
         $kriteria = Kriteria::with('crips')->orderBy('id', 'ASC')->get();
         $penilaian = Penilaian::with('crips', 'alternatif')->get();
 
-        // Jika tidak ada data penilaian, langsung tampilkan view dengan pesan
         if ($penilaian->isEmpty()) {
             return view('admin.perhitungan.index', [
                 'alternatif' => [],
@@ -40,74 +38,73 @@ class AlgoritmaController extends Controller
             ]);
         }
 
-        // Inisialisasi array kosong untuk minMax
+        // Tahap Normalisasi
+        // 1. Cari min/max dengan presisi tinggi
         $minMax = [];
-
-        // Mencari nilai min/max per kriteria
-        foreach ($kriteria as $value) {
-            foreach ($penilaian as $value_1) {
-                if ($value->id == $value_1->crips->kriteria_id) {
-                    $minMax[$value->id][] = $value_1->crips->bobot;
+        foreach ($kriteria as $krit) {
+            $values = [];
+            foreach ($penilaian as $pen) {
+                if ($pen->crips && $pen->crips->kriteria_id == $krit->id) {
+                    $values[] = (float)$pen->crips->bobot;
                 }
             }
+            $minMax[$krit->id] = [
+                'min' => !empty($values) ? min($values) : 0,
+                'max' => !empty($values) ? max($values) : 0
+            ];
         }
 
-        // Inisialisasi array kosong untuk normalisasi
+        // 2. Normalisasi dengan handling pembagian nol
         $normalisasi = [];
+        foreach ($penilaian as $pen) {
+            if (!$pen->crips) continue;
 
-        // Normalisasi
-        foreach ($penilaian as $value_1) {
-            foreach ($kriteria as $value) {
-                if ($value->id == $value_1->crips->kriteria_id) {
-                    $bobot = $value_1->crips->bobot;
-                    $max = max($minMax[$value->id] ?? [1]); // Default 1 untuk aman
-                    $min = min($minMax[$value->id] ?? [1]); // Default 1 untuk aman
+            $kritId = $pen->crips->kriteria_id;
+            $bobot = (float)$pen->crips->bobot;
+            $kriteriaData = $kriteria->firstWhere('id', $kritId);
 
-                    if ($value->attribut == 'Benefit') {
-                        $normalisasi[$value_1->alternatif->nama_alternatif][$value->id] = $max != 0 ? ($bobot / $max) : 0;
-                    } elseif ($value->attribut == 'Cost') {
-                        $normalisasi[$value_1->alternatif->nama_alternatif][$value->id] = $bobot != 0 ? ($min / $bobot) : 0;
-                    }
-                }
+            if ($kriteriaData->attribut == 'Benefit') {
+                $max = $minMax[$kritId]['max'] ?? 1;
+                $normalisasi[$pen->alternatif->nama_alternatif][$kritId] = 
+                    ($max != 0) ? round($bobot / $max, 10) : 0;
+            } else { // Cost
+                $min = $minMax[$kritId]['min'] ?? 1;
+                $normalisasi[$pen->alternatif->nama_alternatif][$kritId] = 
+                    ($bobot != 0) ? round($min / $bobot, 10) : 0;
             }
         }
 
-        // Inisialisasi array kosong untuk rank
-        $rank = [];
-
-        // Perangkingan
-        foreach ($normalisasi as $key => $value) {
-            foreach ($kriteria as $k) {
-                if (isset($value[$k->id])) {
-                    $rank[$key][] = $value[$k->id] * $k->bobot;
-                }
-            }
-        }
-
-        // Hitung total skor tiap alternatif
+        // Tahap Preferensi
+        // 3. Perhitungan ranking dengan presisi tinggi
         $ranking = [];
-        foreach ($rank as $key => $value) {
-            $ranking[$key] = array_sum($value);
+        foreach ($normalisasi as $altName => $kritValues) {
+            $total = 0;
+            foreach ($kriteria as $krit) {
+                if (isset($kritValues[$krit->id])) {
+                    $total += round($kritValues[$krit->id] * (float)$krit->bobot, 10);
+                }
+            }
+            $ranking[$altName] = $total;
         }
 
-        // Urutkan skor dari besar ke kecil
+        // 4. Pengurutan ranking
         arsort($ranking);
+        $peringkat = array_flip(array_keys($ranking)); // Dimulai dari 0
+        $peringkat = array_map(fn($x) => $x + 1, $peringkat); // Ubah ke mulai dari 1
 
-        // Tambahkan peringkat
-        $peringkat = [];
-        $i = 1;
-        foreach ($ranking as $key => $score) {
-            $peringkat[$key] = $i++;
-        }
-
-        // Uji Kesesuaian
+        // 5. Hitung uji kesesuaian
+        $jumlahAlternatif = count($ranking);
+        // Hitung rata-rata skor dengan presisi tinggi
         $totalSkor = array_sum($ranking);
         $jumlahAlternatif = count($ranking);
-        $rataRata = $jumlahAlternatif > 0 ? ($totalSkor / $jumlahAlternatif) : 0;
-        $tingkatKesesuaian = 100 - ($rataRata / 100);
+        $rataRata = ($jumlahAlternatif > 0) ? round($totalSkor / $jumlahAlternatif, 6) : 0;
+
+        // Jika ingin persentase deviasi dari skor ideal (1.0)
+        $tingkatKesesuaian = 100 - ($rataRata / 100) * 100;
 
         return view('admin.perhitungan.index', compact(
-            'alternatif', 'kriteria', 'normalisasi', 'ranking', 'peringkat', 'rataRata', 'tingkatKesesuaian'
+            'alternatif', 'kriteria', 'normalisasi', 'ranking', 'peringkat', 
+            'rataRata', 'tingkatKesesuaian'
         ));
     }
 
@@ -118,54 +115,67 @@ class AlgoritmaController extends Controller
             'metode' => 'required|in:Entropi-SAW,SAW',
         ]);
 
-        // Ambil data yang sama seperti di index
+        // Ambil data alternatif, kriteria, dan penilaian
         $alternatif = Alternatif::with('penilaian.crips')->get();
         $kriteria = Kriteria::with('crips')->orderBy('id', 'ASC')->get();
         $penilaian = Penilaian::with('crips', 'alternatif')->get();
 
+        // Jika tidak ada data penilaian, kembalikan error
+        if ($penilaian->isEmpty()) {
+            return redirect()->route('perhitungan.index')->with('error', 'Belum ada data penilaian.');
+        }
+
+        // 1. Hitung min/max per kriteria (presisi tinggi seperti di index terbaru)
         $minMax = [];
-        foreach ($kriteria as $value) {
-            foreach ($penilaian as $value_1) {
-                if ($value->id == $value_1->crips->kriteria_id) {
-                    $minMax[$value->id][] = $value_1->crips->bobot;
+        foreach ($kriteria as $krit) {
+            $values = [];
+            foreach ($penilaian as $pen) {
+                if ($pen->crips && $pen->crips->kriteria_id == $krit->id) {
+                    $values[] = (float)$pen->crips->bobot;
                 }
             }
+            $minMax[$krit->id] = [
+                'min' => !empty($values) ? min($values) : 0,
+                'max' => !empty($values) ? max($values) : 0
+            ];
         }
 
+        // 2. Normalisasi dengan rounding (seperti di index terbaru)
         $normalisasi = [];
-        foreach ($penilaian as $value_1) {
-            foreach ($kriteria as $value) {
-                if ($value->id == $value_1->crips->kriteria_id) {
-                    $bobot = $value_1->crips->bobot;
-                    $max = max($minMax[$value->id] ?? [1]);
-                    $min = min($minMax[$value->id] ?? [1]);
+        foreach ($penilaian as $pen) {
+            if (!$pen->crips) continue; // Skip jika crips tidak ada
 
-                    if ($value->attribut == 'Benefit') {
-                        $normalisasi[$value_1->alternatif->nama_alternatif][$value->id] = $max != 0 ? ($bobot / $max) : 0;
-                    } elseif ($value->attribut == 'Cost') {
-                        $normalisasi[$value_1->alternatif->nama_alternatif][$value->id] = $bobot != 0 ? ($min / $bobot) : 0;
-                    }
-                }
+            $kritId = $pen->crips->kriteria_id;
+            $bobot = (float)$pen->crips->bobot;
+            $kriteriaData = $kriteria->firstWhere('id', $kritId);
+
+            if ($kriteriaData->attribut == 'Benefit') {
+                $max = $minMax[$kritId]['max'] ?? 1;
+                $normalisasi[$pen->alternatif->nama_alternatif][$kritId] = 
+                    ($max != 0) ? round($bobot / $max, 10) : 0;
+            } else { // Cost
+                $min = $minMax[$kritId]['min'] ?? 1;
+                $normalisasi[$pen->alternatif->nama_alternatif][$kritId] = 
+                    ($bobot != 0) ? round($min / $bobot, 10) : 0;
             }
         }
 
-        $rank = [];
-        foreach ($normalisasi as $key => $value) {
-            foreach ($kriteria as $k) {
-                if (isset($value[$k->id])) {
-                    $rank[$key][] = $value[$k->id] * $k->bobot;
-                }
-            }
-        }
-
+        // 3. Hitung ranking (dengan rounding seperti di index terbaru)
         $ranking = [];
-        foreach ($rank as $key => $value) {
-            $ranking[$key] = array_sum($value);
+        foreach ($normalisasi as $altName => $kritValues) {
+            $total = 0;
+            foreach ($kriteria as $krit) {
+                if (isset($kritValues[$krit->id])) {
+                    $total += round($kritValues[$krit->id] * (float)$krit->bobot, 10);
+                }
+            }
+            $ranking[$altName] = $total;
         }
 
+        // Urutkan dari skor tertinggi ke terendah
         arsort($ranking);
 
-        // Buat riwayat_perhitungan
+        // Simpan ke tabel riwayat_perhitungan (TANPA rata_rata_skor dan tingkat_kesesuaian)
         $riwayat = RiwayatPerhitungan::create([
             'nama_perhitungan' => $request->nama_perhitungan,
             'tanggal_perhitungan' => Carbon::now(),
@@ -175,7 +185,7 @@ class AlgoritmaController extends Controller
             'user_id' => Auth::id(),
         ]);
 
-        // Simpan detail
+        // Simpan detail peringkat
         $peringkat = 1;
         foreach ($ranking as $nama => $skor) {
             RiwayatDetail::create([
@@ -187,6 +197,7 @@ class AlgoritmaController extends Controller
             ]);
         }
 
-        return redirect()->route('perhitungan.index')->with('success', 'Hasil perhitungan berhasil disimpan ke riwayat.');
+        return redirect()->route('perhitungan.index')->with('success', 'Hasil perhitungan berhasil disimpan.');
     }
+
 }

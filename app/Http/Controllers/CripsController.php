@@ -37,6 +37,11 @@ class CripsController extends Controller
 
     public function update(Request $request, $id)
     {
+        $this->validate($request, [
+            'nama_crips' => 'required|string',
+            'bobot'      => 'required|numeric'
+        ]);
+        
         try {
             $crips = Crips::findOrFail($id);
             $crips->update([
