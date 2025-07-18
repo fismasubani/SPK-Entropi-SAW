@@ -17,7 +17,7 @@ class DashboardController extends Controller
         setlocale(LC_TIME, 'id_ID.UTF-8');
 
         $riwayat = RiwayatPerhitungan::with('user')->latest()->get();
-        return view('admin.dashboard.index', compact('riwayat')); // Pastikan file resources/views/dashboard.blade.php ada
+        return view('admin.dashboard.index', compact('riwayat'));
     }
 
     // Menampilkan detail riwayat
