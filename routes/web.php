@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AlternatifController;
 use App\Http\Controllers\EntropiController;
 use App\Http\Controllers\AlgoritmaController;
 use Illuminate\Support\Facades\Route;
@@ -29,7 +30,12 @@ Route::get('/riwayat-perhitungan', [DashboardController::class, 'index'])->name(
 Route::get('/dashboard/{id}/cetak', [DashboardController::class, 'cetakPDF'])->name('dashboard.cetak');
 
 Route::resource("kriteria", "KriteriaController")->except(['create']);
+
 Route::resource("alternatif", "AlternatifController")->except(['create','show']);
+Route::post('/alternatif/import', [AlternatifController::class, 'import'])->name('alternatif.import');
+Route::post('/alternatif/delete-all', [AlternatifController::class, 'deleteAll'])->name('alternatif.deleteAll');
+
+
 Route::resource("crips", "CripsController")->except(['index','create','show']);
 Route::resource('/penilaian', 'PenilaianController');
 Route::get('/perhitungan','AlgoritmaController@index')->name('perhitungan.index');

@@ -4,74 +4,88 @@
     <meta charset="UTF-8">
     <title>Laporan Hasil Perangkingan</title>
     <style>
-        body {
-            font-family: 'Times New Roman', Times, serif;
-            margin: 30px;
-        }
+    body {
+        font-family: 'Times New Roman', Times, serif;
+        margin: 30px;
+    }
 
-        .kop {
-            text-align: center;
-            position: relative;
-            margin-bottom: 20px;
-            border-bottom: 3px solid black;
-            padding-bottom: 10px;
-        }
+    .kop {
+        text-align: center;
+        position: relative;
+        margin-bottom: 20px;
+        border-bottom: 3px solid black;
+        padding-bottom: 10px;
+    }
 
-        .kop img {
-            position: absolute;
-            top: 0;
-            height: 80px;
-        }
+    .kop img {
+        position: absolute;
+        top: 0;
+        height: 80px;
+    }
 
-        .kop .logo-kiri {
-            left: 0;
-        }
+    .kop .logo-kiri {
+        left: 0;
+    }
 
-        .kop .logo-kanan {
-            right: 0;
-        }
+    .kop .logo-kanan {
+        right: 0;
+    }
 
-        .kop .text {
-            font-size: 14px;
-            line-height: 1.4;
-        }
+    .kop .text {
+        font-size: 14px;
+        line-height: 1.4;
+    }
 
-        h3 {
-            text-align: center;
-            margin-top: 30px;
-            margin-bottom: 10px;
-        }
+    h3, h4 {
+        text-align: center;
+        margin-top: 30px;
+        margin-bottom: 10px;
+    }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+        font-size: 12px;
+    }
 
-        table, th, td {
-            border: 1px solid black;
-        }
+    thead th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+        border: 1px solid #333;
+        padding: 8px;
+        text-align: center;
+    }
 
-        th, td {
-            padding: 8px;
-            text-align: center;
-            font-size: 12px;
-        }
+    tbody td {
+        border: 1px solid #999;
+        padding: 6px 8px;
+    }
 
-        .page-break {
-            page-break-before: always;
-        }
+    tbody tr:nth-child(even) {
+        background-color: #fafafa;
+    }
 
-        .ttd {
-            margin-top: 50px;
-            width: 100%;
-        }
+    tbody td.num {
+        text-align: center;
+        font-family: inherit;
+    }
 
-        .ttd .kanan {
-            float: right;
-            text-align: center;
-        }
+    .page-break {
+        page-break-before: always;
+    }
+
+    .ttd {
+        margin-top: 50px;
+        width: 100%;
+    }
+
+    .ttd .kanan {
+        float: right;
+        text-align: center;
+    }
     </style>
+
 </head>
 <body>
 
@@ -107,25 +121,19 @@
             @foreach($data->detail as $detail)
                 <tr>
                     <td>{{ $detail->nama_alternatif }}</td>
-                    @php
-                        $total = 0;
-                    @endphp
+                    @php $total = 0; @endphp
                     @foreach($kriteria as $k)
                         @php
-                            // Ambil nilai normalisasi dari array yang sudah ada
                             $nilai = $normalisasi[$detail->nama_alternatif][$k->id] ?? 0;
                             $preferensi = $nilai * $k->bobot;
                             $total += $preferensi;
                         @endphp
-                        <td>{{ number_format($preferensi, 5) }}</td>
+                        <td class="num">{{ number_format($preferensi, 5) }}</td>
                     @endforeach
                 </tr>
             @endforeach
         </tbody>
     </table>
-
-
-
 
     <div class="page-break"></div>
 
@@ -147,15 +155,15 @@
             @foreach($data->detail as $detail)
                 @php
                     $total_skor = 0;
-                    $nilai_kriteria = isset($normalisasi[$detail->nama_alternatif]) ? $normalisasi[$detail->nama_alternatif] : [];
+                    $nilai_kriteria = $normalisasi[$detail->nama_alternatif] ?? [];
                 @endphp
                 <tr>
-                    <td>{{ $peringkat++ }}</td>
+                    <td class="num">{{ $peringkat++ }}</td>
                     <td>{{ $detail->nama_alternatif }}</td>
-                    <td>
+                    <td class="num">
                         @foreach($kriteria as $k)
                             @php
-                                $nilai = isset($nilai_kriteria[$k->id]) ? $nilai_kriteria[$k->id] : 0;
+                                $nilai = $nilai_kriteria[$k->id] ?? 0;
                                 $total_skor += $nilai * $k->bobot;
                             @endphp
                         @endforeach
@@ -165,6 +173,7 @@
             @endforeach
         </tbody>
     </table>
+
 
     <div style="position: relative; margin-top: 50px;">
         <div style="position: absolute; right: 10px; text-align: left; width: 210px;">

@@ -3,6 +3,25 @@
 @section('css')
 <!-- Custom styles for this page -->
 <link href="{{ asset('vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+<style>
+    /* Tombol aksi bulat dan seragam */
+    .btn-icon {
+        width: 32px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+    }
+
+    /* Supaya kolom aksi tidak melebar */
+    table td:last-child,
+    table th:last-child {
+        text-align: center;
+        width: 150px !important;
+        white-space: nowrap;
+    }
+</style>
 @stop
 @section('content')
     <div class="row">
@@ -11,7 +30,7 @@
                 <!-- Card Header - Accordion -->
                 <a href="#tambahcrips" class="d-block card-header py-3" data-toggle="collapse"
                     role="button" aria-expanded="true" aria-controls="collapseCardExample">
-                    <h6 class="m-0 font-weight-bold text-primary">Tambah Data Sub Krtiteria {{ $kriteria->nama_kriteria }} (Crips)</h6>
+                    <h5 class="m-0 font-weight-bold text-primary">Tambah Data Sub Krtiteria {{ $kriteria->nama_kriteria }} (Crips)</h5>
                 </a>
                 <!-- Card Content - Collapse -->
                 <div class="collapse show" id="tambahkcrips">
@@ -55,42 +74,49 @@
         </div>
         <div class="col-md-8">
             <div class="card shadow mb-4">
-                <!-- Card Header - Accordion -->
-                <a href="#listkriteria" class="d-block card-header py-3" data-toggle="collapse"
-                    role="button" aria-expanded="true" aria-controls="collapseCardExample">
-                    <h6 class="m-0 font-weight-bold text-primary">Daftar Data Sub Kriteria {{ $kriteria->nama_kriteria }} (Crips)</h6>
-                </a>
-                <!-- Card Content - Collapse -->
+                <!-- Card Header -->
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="m-0 font-weight-bold text-primary">
+                        Daftar Data Sub Kriteria {{ $kriteria->nama_kriteria }} (Crips)
+                    </h5>
+                </div>
+
+                <!-- Card Content -->
                 <div class="collapse show" id="listkriteria">
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-striped table-hover" id="DataTable">
-                                <thead>
+                            <table class="table table-bordered table-striped table-hover align-middle" id="DataTable">
+                                <thead class="thead-dark text-center">
                                     <tr>
-                                        <th>No</th>
+                                        <th style="width: 5%">No</th>
                                         <th>Nama Sub Kriteria (Crips)</th>
                                         <th>Skala</th>
-                                        <th>Aksi</th>
+                                        <th style="width: 15%">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @php $no = 1; @endphp
-                                    @foreach($crips as $row)
+                                    @forelse($crips as $row)
                                         <tr>
-                                            <td>{{ $no++ }}</td>
+                                            <td class="text-center">{{ $no++ }}</td>
                                             <td>{{ $row->nama_crips }}</td>
-                                            <td>{{ $row->bobot }}</td>
-                                            <td>
-                                                <a href="{{ route('crips.edit', $row->id) }}" class="btn btn-sm btn-circle btn-warning">
+                                            <td class="text-center">{{ $row->bobot }}</td>
+                                            <td class="text-center">
+                                                <a href="{{ route('crips.edit', $row->id) }}" 
+                                                class="btn btn-sm btn-warning mx-1" title="Edit">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
-                                                <a href="{{ route('crips.destroy', $row->id) }}" class="btn btn-sm btn-circle btn-danger hapus">
+                                                <a href="{{ route('crips.destroy', $row->id) }}" 
+                                                class="btn btn-sm btn-danger hapus mx-1" title="Hapus">
                                                     <i class="fa fa-trash"></i>
                                                 </a>
-                                                
                                             </td>
                                         </tr>
-                                    @endforeach
+                                    @empty
+                                        <tr>
+                                            <td colspan="4" class="text-center text-muted">Belum ada data sub kriteria</td>
+                                        </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>
@@ -98,50 +124,73 @@
                 </div>
             </div>
         </div>
+
     </div>
 @stop
 @section('js')
     <!-- Page level plugins -->
     <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('js/sweetalert.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         $(document).ready(function(){
             $('#DataTable').DataTable();
 
-            $('.hapus').on('click', function(){
-                swal({
+            $(document).on('click', '.hapus', function(e) {
+                e.preventDefault(); // cegah aksi default
+
+                let url = $(this).attr('href');
+
+                Swal.fire({
                     title: "Apa Anda yakin?",
                     text: "Sekali Anda hapus, data tidak bisa dipulihkan kembali!",
                     icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
-                    })
-                    .then((willDelete) => {
-                    if (willDelete) {
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Oke",
+                    cancelButtonText: "Cancel",
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
                         $.ajax({
-                            url: $(this).attr('href'),
+                            url: url,
                             type: 'DELETE',
                             data: {
                                 '_token': "{{ csrf_token() }}"
                             },
-                            success:function()
-                            {
-                                swal("Data berhasil dihapus!", {
-                                icon: "success",
-                                }).then((willDelete) => {
-                                    window.location = "{{ route('kriteria.show', $kriteria->id) }}"
+                            success: function() {
+                                Swal.fire({
+                                    title: "Berhasil!",
+                                    text: "Data berhasil dihapus.",
+                                    icon: "success",
+                                    confirmButtonText: "Oke"
+                                }).then(() => {
+                                    window.location = "{{ route('kriteria.show', $kriteria->id) }}";
+                                });
+                            },
+                            error: function() {
+                                Swal.fire({
+                                    title: "Gagal!",
+                                    text: "Terjadi kesalahan saat menghapus data.",
+                                    icon: "error",
+                                    confirmButtonText: "Oke"
                                 });
                             }
-                        })
-                        
-                    } else {
-                        swal("Data aman!");
+                        });
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        Swal.fire({
+                            title: "Dibatalkan",
+                            text: "Data aman 😊",
+                            icon: "info",
+                            confirmButtonText: "Oke"
+                        });
                     }
                 });
 
                 return false;
-            })
-        })
+            });
+        });
     </script>
 @stop

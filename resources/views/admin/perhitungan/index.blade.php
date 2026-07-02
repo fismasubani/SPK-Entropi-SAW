@@ -4,12 +4,10 @@
 
 <!-- Menampilkan Pesan Belum Ada Data -->
 @if (isset($message))
-    <div class="alert alert-warning">
-        {{ $message }}
-    </div>
+    <div class="alert alert-warning">{{ $message }}</div>
 @endif
 
-<!-- Menampilkan Pesan Berhasil Simpan Data -->
+<!-- Menampilkan Pesan Berhasil -->
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
@@ -17,7 +15,7 @@
 <!-- Tombol Simpan Hasil -->
 @if (!isset($isPdf))
 <div class="d-flex justify-content-end mb-4">
-    <button type="button" class="btn btn-success mr-2" data-toggle="modal" data-target="#modalSimpanHasil">
+    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalSimpanHasil">
         <i class="fas fa-save"></i> Simpan Hasil
     </button>
 </div>
@@ -25,32 +23,34 @@
 
 <!-- PENILAIAN ALTERNATIF -->
 <div class="card shadow mb-4">
-    <!-- Card Header - Accordion -->
-    <a href="#tambahkriteria" class="d-block card-header py-3" data-toggle="collapse"
-        role="button" aria-expanded="true" aria-controls="collapseCardExample">
-        <h6 class="m-0 font-weight-bold text-primary">Tahap Penilaian Alternatif</h6>
+    <a href="#penilaianAlternatif" class="d-block card-header py-3" data-toggle="collapse"
+        role="button" aria-expanded="true" aria-controls="penilaianAlternatif">
+        <h5 class="m-0 font-weight-bold text-primary">Tahap Penilaian Alternatif</h5>
     </a>
-    <!-- Card Content - Collapse -->
-    <div class="collapse show" id="tambahkriteria">
+    <div class="collapse show" id="penilaianAlternatif">
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
+                <table class="table table-bordered table-striped align-middle">
+                    <thead class="thead-light">
                         <tr>
-                            <th>Nama Alternatif</th>
+                            <th class="text-left align-middle">Nama Alternatif</th>
                             @foreach($kriteria as $value)
-                                <th>{{ $value->nama_kriteria }}</th>
+                                <th class="text-center align-middle">{{ $value->nama_kriteria }}</th>
                             @endforeach
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($alternatif as $valt)
                             <tr>
-                                <td>{{ $valt->nama_alternatif }}</td>
+                                <td class="text-left align-middle">{{ $valt->nama_alternatif }}</td>
                                 @if(count($valt->penilaian) > 0)
                                     @foreach($valt->penilaian as $value)
-                                        <td>{{ $value->crips->bobot }}</td>
+                                        <td class="text-center align-middle">{{ $value->crips->bobot }}</td>
                                     @endforeach
+                                @else
+                                    @for($i = 0; $i < count($kriteria); $i++)
+                                        <td class="text-center align-middle">-</td>
+                                    @endfor
                                 @endif
                             </tr>
                         @empty
@@ -68,18 +68,18 @@
 <!-- NORMALISASI -->
 <div class="card shadow mb-4">
     <a href="#normalisasi" class="d-block card-header py-3" data-toggle="collapse"
-        role="button" aria-expanded="true" aria-controls="collapseCardExample">
-        <h6 class="m-0 font-weight-bold text-primary">Tahap Normalisasi (SAW)</h6>
+        role="button" aria-expanded="true" aria-controls="normalisasi">
+        <h5 class="m-0 font-weight-bold text-primary">Tahap Normalisasi (SAW)</h5>
     </a>
     <div class="collapse show" id="normalisasi">
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
+                <table class="table table-bordered table-striped align-middle">
+                    <thead class="thead-light">
                         <tr>
-                            <th>Nama Alternatif</th>
+                            <th class="text-left align-middle">Nama Alternatif</th>
                             @foreach($kriteria as $value)
-                                <th>{{ $value->nama_kriteria }}</th>
+                                <th class="text-center align-middle">{{ $value->nama_kriteria }}</th>
                             @endforeach
                         </tr>
                     </thead>
@@ -87,9 +87,9 @@
                         @if(!empty($normalisasi))
                             @foreach($normalisasi as $alt => $values)
                                 <tr>
-                                    <td>{{ $alt }}</td>
+                                    <td class="text-left align-middle">{{ $alt }}</td>
                                     @foreach($values as $val)
-                                        <td>{{ number_format($val, 2) }}</td> <!-- 2 angka koma -->
+                                        <td class="text-center align-middle">{{ number_format($val, 2) }}</td>
                                     @endforeach
                                 </tr>
                             @endforeach
@@ -105,35 +105,34 @@
     </div>
 </div>
 
-<!-- TAHAP PERHITUNGAN PREFERENSI -->
+<!-- PERHITUNGAN PREFERENSI -->
 <div class="card shadow mb-4">
     <a href="#ranking" class="d-block card-header py-3" data-toggle="collapse"
-        role="button" aria-expanded="true" aria-controls="collapseCardExample">
-        <h6 class="m-0 font-weight-bold text-primary">Tahap Perhitungan Preferensi (V)</h6>
+        role="button" aria-expanded="true" aria-controls="ranking">
+        <h5 class="m-0 font-weight-bold text-primary">Tahap Perhitungan Preferensi (V)</h5>
     </a>
     <div class="collapse show" id="ranking">
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
+                <table class="table table-bordered table-striped align-middle">
+                    <thead class="thead-light">
                         <tr>
-                            <th rowspan="2"></th> <!-- Kosong pojok kiri -->
+                            <th rowspan="2" class="text-left align-middle">Nama Alternatif</th>
                             @foreach($kriteria as $k)
-                                <th>{{ $k->nama_kriteria }}</th>
+                                <th class="text-center align-middle">{{ $k->nama_kriteria }}</th>
                             @endforeach
-                            <th rowspan="2" style="text-align:center; padding-bottom:45px;">Total</th>
-                            <th rowspan="2" style="text-align:center; padding-bottom:45px;">Rank</th>
+                            <th rowspan="2" class="text-center align-middle">Total</th>
+                            <th rowspan="2" class="text-center align-middle">Rank</th>
                         </tr>
                         <tr>
                             @foreach($kriteria as $k)
-                                <th>{{ number_format($k->bobot, 4) }}</th>
+                                <th class="text-center align-middle">{{ number_format($k->bobot, 4) }}</th>
                             @endforeach
                         </tr>
                     </thead>
                     <tbody>
                         @if(!empty($normalisasi))
                             @php
-                                // Hitung total skor dulu
                                 $ranking = [];
                                 foreach($normalisasi as $alt => $values){
                                     $total = 0;
@@ -144,8 +143,6 @@
                                     }
                                     $ranking[$alt] = $total;
                                 }
-
-                                // Urutkan ranking
                                 arsort($ranking);
                                 $rank = 1;
                                 $ranked = [];
@@ -156,10 +153,8 @@
 
                             @foreach($normalisasi as $alt => $values)
                                 <tr>
-                                    <td>{{ $alt }}</td>
-                                    @php
-                                        $total = 0;
-                                    @endphp
+                                    <td class="text-left align-middle">{{ $alt }}</td>
+                                    @php $total = 0; @endphp
                                     @foreach($kriteria as $k)
                                         @php
                                             $bobot = $k->bobot ?? 0;
@@ -167,10 +162,10 @@
                                             $hasil = $nilai_normalisasi * $bobot;
                                             $total += $hasil;
                                         @endphp
-                                        <td>{{ number_format($hasil, 5) }}</td>
+                                        <td class="text-center align-middle">{{ number_format($hasil, 5) }}</td>
                                     @endforeach
-                                    <td>{{ number_format($total, 5) }}</td>
-                                    <td>{{ $ranked[$alt] }}</td>
+                                    <td class="text-center align-middle">{{ number_format($total, 5) }}</td>
+                                    <td class="text-center align-middle">{{ $ranked[$alt] }}</td>
                                 </tr>
                             @endforeach
                         @endif
@@ -184,21 +179,21 @@
 <!-- UJI KESESUAIAN -->
 <div class="card shadow mb-4">
     <a href="#kesesuaian" class="d-block card-header py-3" data-toggle="collapse"
-        role="button" aria-expanded="true" aria-controls="collapseCardExample">
-        <h6 class="m-0 font-weight-bold text-primary">Uji Kesesuaian Metode</h6>
+        role="button" aria-expanded="true" aria-controls="kesesuaian">
+        <h5 class="m-0 font-weight-bold text-primary">Uji Kesesuaian Metode</h5>
     </a>
     <div class="collapse show" id="kesesuaian">
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered w-50">
+                <table class="table table-bordered table-striped w-50">
                     <tbody>
                         <tr>
-                            <th>Nilai Rata-rata Metode SAW</th>
-                            <td>{{ number_format($rataRata, 4) }}</td>
+                            <th class="text-left align-middle">Nilai Rata-rata Metode SAW</th>
+                            <td class="text-center align-middle">{{ number_format($rataRata, 4) }}</td>
                         </tr>
                         <tr>
-                            <th>Tingkat Kesesuaian Metode SAW</th>
-                            <td>{{ number_format($tingkatKesesuaian, 2) }}%</td>
+                            <th class="text-left align-middle">Tingkat Kesesuaian Metode SAW</th>
+                            <td class="text-center align-middle">{{ number_format($tingkatKesesuaian, 2) }}%</td>
                         </tr>
                     </tbody>
                 </table>
@@ -208,34 +203,29 @@
     </div>
 </div>
 
-<!-- Modal Simpan Hasil -->
+<!-- Modal -->
 <div class="modal fade" id="modalSimpanHasil" tabindex="-1" role="dialog" aria-labelledby="modalSimpanHasilLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form action="{{ route('perhitungan.simpan') }}" method="POST">
             @csrf
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalSimpanHasilLabel">Simpan Hasil Perhitungan</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <h5 class="modal-title">Simpan Hasil Perhitungan</h5>
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
                 </div>
-
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="nama_perhitungan">Nama Perhitungan</label>
-                        <input type="text" class="form-control" id="nama_perhitungan" name="nama_perhitungan" required placeholder="Masukkan nama perhitungan">
+                        <label>Nama Perhitungan</label>
+                        <input type="text" class="form-control" name="nama_perhitungan" required placeholder="Masukkan nama perhitungan">
                     </div>
-
                     <div class="form-group">
-                        <label for="metode">Metode Perhitungan</label>
-                        <select class="form-control" id="metode" name="metode" required>
+                        <label>Metode Perhitungan</label>
+                        <select class="form-control" name="metode" required>
                             <option value="Entropi-SAW">Entropi-SAW</option>
                             <option value="SAW">SAW</option>
                         </select>
                     </div>
                 </div>
-
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Simpan</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
@@ -244,4 +234,5 @@
         </form>
     </div>
 </div>
+
 @endsection

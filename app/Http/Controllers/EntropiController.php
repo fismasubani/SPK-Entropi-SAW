@@ -29,7 +29,7 @@ class EntropiController extends Controller
                 'entropi' => [],
                 'dispersi' => [],
                 'bobot' => [],
-                'message' => 'Belum ada data penilaian.'
+                'message' => 'Belum ada data penilaian yang tersedia.'
             ]);
         }
 

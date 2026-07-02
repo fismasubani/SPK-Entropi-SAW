@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Alternatif;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\AlternatifImport;
 
 class AlternatifController extends Controller
 {
@@ -28,11 +30,25 @@ class AlternatifController extends Controller
             $alternatif = new Alternatif();
             $alternatif->nama_alternatif = $request->nama_alternatif;
             $alternatif->save();
-            return back()->with('msg','Data berhasil disimpan');
+            return redirect()->route('alternatif.index')->with('success_manual', 'Data alternatif berhasil disimpan!');
 
         } catch (Exception $e) {
             \Log::emergency("File:" . $e->getFile(). "Line:" . $e->getLine(). "Message:" . $e->getMessage());
             die("Gagal");
+        }
+    }
+
+    public function import(Request $request)
+    {
+        $this->validate($request, [
+            'file' => 'required|mimes:xlsx,xls,csv'
+        ]);
+
+        try {
+            Excel::import(new AlternatifImport, $request->file('file'));
+            return redirect()->route('alternatif.index')->with('success_import', 'Data alternatif berhasil diimpor dari file!');
+        } catch (\Exception $e) {
+            return back()->with('msg', 'Terjadi kesalahan saat impor: ' . $e->getMessage());
         }
     }
 
@@ -72,4 +88,20 @@ class AlternatifController extends Controller
             die("Gagal");
         }
     }
+
+    public function deleteAll()
+    {
+        try {
+            Alternatif::query()->delete();
+
+            return redirect()
+                ->route('alternatif.index')
+                ->with('success', 'Semua data alternatif berhasil dihapus.');
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('alternatif.index')
+                ->with('error', 'Gagal menghapus data: ' . $e->getMessage());
+        }
+    }
+
 }

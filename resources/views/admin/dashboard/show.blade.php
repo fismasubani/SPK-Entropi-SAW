@@ -69,34 +69,35 @@
 </div>
 
 {{-- Tabel Detail Perhitungan --}}
+<!-- DETAIL HASIL PERHITUNGAN -->
 <div class="card shadow mb-4">
     <a href="#ranking" class="d-block card-header py-3" data-toggle="collapse"
-        role="button" aria-expanded="true" aria-controls="collapseCardExample">
-        <h6 class="m-0 font-weight-bold text-primary">Detail Hasil Perhitungan</h6>
+        role="button" aria-expanded="true" aria-controls="ranking">
+        <h5 class="m-0 font-weight-bold text-primary">Detail Hasil Perhitungan</h5>
     </a>
     <div class="collapse show" id="ranking">
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
+                <table class="table table-bordered table-striped align-middle">
+                    <thead class="thead-light">
                         <tr>
-                            <th rowspan="2">Alternatif</th>
+                            <th rowspan="2" class="text-left align-middle">Alternatif</th>
                             @foreach($kriteria as $k)
-                                <th>{{ $k->nama_kriteria }}</th>
+                                <th class="text-center align-middle">{{ $k->nama_kriteria }}</th>
                             @endforeach
-                            <th rowspan="2">Total</th>
-                            <th rowspan="2">Rank</th>
+                            <th rowspan="2" class="text-center align-middle">Total</th>
+                            <th rowspan="2" class="text-center align-middle">Rank</th>
                         </tr>
                         <tr>
                             @foreach($kriteria as $k)
-                                <th>{{ number_format($k->bobot, 4) }}</th>
+                                <th class="text-center align-middle">{{ number_format($k->bobot, 4) }}</th>
                             @endforeach
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($data->detail as $d)
                             <tr>
-                                <td>{{ $d->nama_alternatif }}</td>
+                                <td class="text-left align-middle">{{ $d->nama_alternatif }}</td>
                                 @php $total = 0; @endphp
                                 @foreach($kriteria as $k)
                                     @php
@@ -104,10 +105,10 @@
                                         $preferensi = $nilai * $k->bobot;
                                         $total += $preferensi;
                                     @endphp
-                                    <td>{{ number_format($preferensi, 5) }}</td>
+                                    <td class="text-center align-middle">{{ number_format($preferensi, 5) }}</td>
                                 @endforeach
-                                <td>{{ number_format($total, 5) }}</td>
-                                <td>{{ $d->peringkat }}</td>
+                                <td class="text-center align-middle">{{ number_format($total, 5) }}</td>
+                                <td class="text-center align-middle">{{ $d->peringkat }}</td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -115,5 +116,5 @@
             </div>
         </div>
     </div>
-</div>    
+</div>   
 @endsection

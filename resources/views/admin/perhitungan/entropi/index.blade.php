@@ -3,14 +3,12 @@
 
 @section('content')
 
-<!-- Menampilkan Pesan Belum Ada Data -->
 @if (isset($message))
     <div class="alert alert-warning">
         {{ $message }}
     </div>
 @endif
 
-<!-- Menampilkan Pesan Berhasil -->
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
@@ -19,27 +17,27 @@
 <div class="card shadow mb-4">
     <a href="#penilaian" class="d-block card-header py-3" data-toggle="collapse"
         role="button" aria-expanded="true" aria-controls="penilaian">
-        <h6 class="m-0 font-weight-bold text-primary">Tahap Penilaian Alternatif</h6>
+        <h5 class="m-0 font-weight-bold text-primary">Tahap Penilaian Alternatif</h5>
     </a>
     <div class="collapse show" id="penilaian">
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
+                <table class="table table-bordered table-striped">
+                    <thead class="thead-light">
                         <tr>
-                            <th>Nama Alternatif</th>
+                            <th class="text-left align-middle">Nama Alternatif</th>
                             @foreach($kriteria as $k)
-                                <th>{{ $k->nama_kriteria }}</th>
+                                <th class="text-center align-middle">{{ $k->nama_kriteria }}</th>
                             @endforeach
                         </tr>
                     </thead>
                     <tbody>
                     @forelse($alternatif as $alt)
                         <tr>
-                            <td>{{ $alt->nama_alternatif }}</td>
+                            <td class="align-middle">{{ $alt->nama_alternatif }}</td>
                             @if(count($alt->penilaian) > 0)
                                 @foreach($alt->penilaian as $value)
-                                    <td>{{ $value->crips->bobot }}</td>
+                                    <td class="text-center align-middle">{{ $value->crips->bobot }}</td>
                                 @endforeach
                             @endif
                         </tr>
@@ -59,26 +57,26 @@
 <div class="card shadow mb-4">
     <a href="#normalisasi" class="d-block card-header py-3" data-toggle="collapse"
         role="button" aria-expanded="true" aria-controls="normalisasi">
-        <h6 class="m-0 font-weight-bold text-primary">Tahap Normalisasi (ENTROPI)</h6>
+        <h5 class="m-0 font-weight-bold text-primary">Tahap Normalisasi (ENTROPI)</h5>
     </a>
     <div class="collapse show" id="normalisasi">
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
+                <table class="table table-bordered table-striped">
+                    <thead class="thead-light">
                         <tr>
-                            <th>Nama Alternatif</th>
+                            <th class="text-left align-middle">Nama Alternatif</th>
                             @foreach($kriteria as $k)
-                                <th>{{ $k->nama_kriteria }}</th>
+                                <th class="text-center align-middle">{{ $k->nama_kriteria }}</th>
                             @endforeach
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($normalisasi as $namaAlternatif => $nilaiAlternatif)
                             <tr>
-                                <td>{{ $namaAlternatif }}</td>
+                                <td class="align-middle">{{ $namaAlternatif }}</td>
                                 @foreach($kriteria as $k)
-                                    <td>{{ number_format($nilaiAlternatif[$k->id] ?? 0, 2) }}</td>
+                                    <td class="text-center align-middle">{{ number_format($nilaiAlternatif[$k->id] ?? 0, 2) }}</td>
                                 @endforeach
                             </tr>
                         @empty
@@ -93,30 +91,30 @@
     </div> 
 </div>
 
-<!-- TABEL PROPORSI -->
+<!-- PROPORSI -->
 <div class="card shadow mb-4">
     <a href="#proporsi" class="d-block card-header py-3" data-toggle="collapse"
         role="button" aria-expanded="true" aria-controls="proporsi">
-        <h6 class="m-0 font-weight-bold text-primary">Tahap Proyeksi</h6>
+        <h5 class="m-0 font-weight-bold text-primary">Tahap Proyeksi</h5>
     </a>
     <div class="collapse show" id="proporsi">
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
+                <table class="table table-bordered table-striped">
+                    <thead class="thead-light">
                         <tr>
-                            <th>Nama Alternatif</th>
+                            <th class="text-left align-middle">Nama Alternatif</th>
                             @foreach($kriteria as $k)
-                                <th>{{ $k->nama_kriteria }}</th>
+                                <th class="text-center align-middle">{{ $k->nama_kriteria }}</th>
                             @endforeach
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($proporsi as $namaAlternatif => $nilaiAlternatif)
                             <tr>
-                                <td>{{ $namaAlternatif }}</td>
+                                <td class="align-middle">{{ $namaAlternatif }}</td>
                                 @foreach($kriteria as $k)
-                                    <td>{{ number_format($nilaiAlternatif[$k->id] ?? 0, 6) }}</td>
+                                    <td class="text-center align-middle">{{ number_format($nilaiAlternatif[$k->id] ?? 0, 6) }}</td>
                                 @endforeach
                             </tr>
                         @empty
@@ -131,43 +129,43 @@
     </div> 
 </div>
 
-<!-- TABEL ENTROPI -->
+<!-- ENTROPI -->
 <div class="card shadow mb-4">
     <a href="#entropi" class="d-block card-header py-3" data-toggle="collapse"
         role="button" aria-expanded="true" aria-controls="entropi">
-        <h6 class="m-0 font-weight-bold text-primary">Tahap Perhitungan Entropi</h6>
+        <h5 class="m-0 font-weight-bold text-primary">Tahap Perhitungan Entropi</h5>
     </a>
     <div class="collapse show" id="entropi">
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
+                <table class="table table-bordered table-striped">
+                    <thead class="thead-light">
                         <tr>
-                            <th>Alternatif</th>
+                            <th class="text-left align-middle">Alternatif</th>
                             @foreach ($kriteria as $kri)
-                                <th>{{ $kri->nama_kriteria }}</th>
+                                <th class="text-center align-middle">{{ $kri->nama_kriteria }}</th>
                             @endforeach
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($pijLnPij as $namaAlternatif => $nilaiAlternatif)
                             <tr>
-                                <td>{{ $namaAlternatif }}</td>
+                                <td class="align-middle">{{ $namaAlternatif }}</td>
                                 @foreach ($kriteria as $kri)
-                                    <td>{{ number_format($nilaiAlternatif[$kri->id] ?? 0, 6) }}</td>
+                                    <td class="text-center align-middle">{{ number_format($nilaiAlternatif[$kri->id] ?? 0, 6) }}</td>
                                 @endforeach
                             </tr>
                         @endforeach
-                        <tr>
-                            <td><strong>Total</strong></td>
+                        <tr class="font-weight-bold">
+                            <td class="text-left align-middle">Total</td>
                             @foreach ($kriteria as $kri)
-                                <td><strong>{{ number_format($totalPijLnPij[$kri->id] ?? 0, 6) }}</strong></td>
+                                <td class="text-center align-middle">{{ number_format($totalPijLnPij[$kri->id] ?? 0, 6) }}</td>
                             @endforeach
                         </tr>
-                        <tr>
-                            <td><strong>Entropi</strong></td>
+                        <tr class="font-weight-bold">
+                            <td class="text-left align-middle">Entropi</td>
                             @foreach ($kriteria as $kri)
-                                <td><strong>{{ number_format($entropi[$kri->id] ?? 0, 6) }}</strong></td>
+                                <td class="text-center align-middle">{{ number_format($entropi[$kri->id] ?? 0, 6) }}</td>
                             @endforeach
                         </tr>
                     </tbody>
@@ -177,27 +175,27 @@
     </div>
 </div>
 
-<!-- TABEL DISPERSI -->
+<!-- DISPERSI -->
 <div class="card shadow mb-4">
     <a href="#dispersi" class="d-block card-header py-3" data-toggle="collapse"
         role="button" aria-expanded="true" aria-controls="dispersi">
-        <h6 class="m-0 font-weight-bold text-primary">Tahap Perhitungan Dispersi</h6>
+        <h5 class="m-0 font-weight-bold text-primary">Tahap Perhitungan Dispersi</h5>
     </a>
     <div class="collapse show" id="dispersi">
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
+                <table class="table table-bordered table-striped">
+                    <thead class="thead-light">
                         <tr>
                             @foreach($kriteria as $k)
-                                <th>{{ $k->nama_kriteria }}</th>
+                                <th class="text-center align-middle">{{ $k->nama_kriteria }}</th>
                             @endforeach
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             @foreach($kriteria as $k)
-                                <td>{{ number_format($dispersi[$k->id], 6) }}</td>
+                                <td class="text-center align-middle">{{ number_format($dispersi[$k->id], 6) }}</td>
                             @endforeach
                         </tr>
                     </tbody>
@@ -207,30 +205,30 @@
     </div>
 </div>
 
-<!-- TABEL BOBOT -->
+<!-- BOBOT -->
 <div class="card shadow mb-4">
     <a href="#bobot" class="d-block card-header py-3" data-toggle="collapse"
         role="button" aria-expanded="true" aria-controls="bobot">
-        <h6 class="m-0 font-weight-bold text-primary">Tahap Perhitungan Bobot</h6>
+        <h5 class="m-0 font-weight-bold text-primary">Tahap Perhitungan Bobot</h5>
     </a>
     <div class="collapse show" id="bobot">
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead>
+                <table class="table table-bordered table-striped">
+                    <thead class="thead-light">
                         <tr>
                             @foreach($kriteria as $k)
-                                <th>{{ $k->nama_kriteria }}</th>
+                                <th class="text-center align-middle">{{ $k->nama_kriteria }}</th>
                             @endforeach
-                            <th>Total</th>
+                            <th class="text-center align-middle">Total</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             @foreach($kriteria as $k)
-                                <td>{{ number_format($bobot[$k->id], 6) }}</td>
+                                <td class="text-center align-middle">{{ number_format($bobot[$k->id], 6) }}</td>
                             @endforeach
-                            <td>{{ number_format(array_sum($bobot), 6) }}</td>
+                            <td class="text-center align-middle">{{ number_format(array_sum($bobot), 6) }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -239,7 +237,7 @@
     </div>
 </div>
 
-<!-- TombolGunakan Bobot -->
+<!-- Tombol Gunakan Bobot -->
 <div class="mt-3">
     <form action="{{ route('entropi.simpanBobot') }}" method="POST">
         @csrf
